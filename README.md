@@ -13,9 +13,7 @@ or:
 The script opens two HDF5 files and recursively compares the datasets
 and groups in the files. It examines groups, datasets and attributes
 and reports if some of these exist in one file and not the other, and
-if their names or types differ between the two files. 
-
-NOTE: it does not compare the values stored in datasets or attributes
+if their names or types differ between the two files. It also reports when there are differences in dataset or attribute values.
 
 When a difference is found, it will report one of the following codes:
 
