@@ -42,7 +42,7 @@ def read_data(hval):
     desc = {}
     desc["attr"] = read_attributes(hval)
     desc["htype"] = "dataset"
-    desc["dtype"] = type(hval.value)
+    desc["dtype"] = type(hval[()])
     return desc
 
 # creates and returns a summary description for every element in a group
