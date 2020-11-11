@@ -31,7 +31,9 @@ When a difference is found, it will report one of the following codes:
 
 	DIFF_ATTR_DTYPE	 -- the type of an attribute differs between files
 	
-	DIFF_DATA        -- one or more values in a dataset differs
+	DIFF_DATA_SHAPE  -- datasets shape differ
+	
+	DIFF_DATA_VALUE  -- one or more values in a dataset differs
 	
 	DIFF_ATTR_VALUE  -- value of an attribute differs
 
