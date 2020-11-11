@@ -19,19 +19,23 @@ NOTE: it does not compare the values stored in datasets or attributes
 
 When a difference is found, it will report one of the following codes:
 
-	DIFF_UNIQUE_A	-- a dataset or group only exists in file A
+	DIFF_UNIQUE_A	 -- a dataset or group only exists in file A
 
-	DIFF_UNIQUE_B	-- a dataset or group only exists in file B
+	DIFF_UNIQUE_B	 -- a dataset or group only exists in file B
 
-	DIFF_OBJECTS	-- an object is a dataset in one file and a group in the other
+	DIFF_OBJECTS	 -- an object is a dataset in one file and a group in the other
 
-	DIFF_DTYPE		-- the type of an object is different between files
+	DIFF_DTYPE       -- the type of an object is different between files
 
 	DIFF_UNIQ_ATTR_A -- an attribute is only present in file A
 
 	DIFF_UNIQ_ATTR_B -- an attribute is only present in file B
 
-	DIFF_ATTR_DTYPE	-- the type of an attribute differs between files
+	DIFF_ATTR_DTYPE	 -- the type of an attribute differs between files
+	
+	DIFF_DATA        -- one or more values in a dataset differs
+	
+	DIFF_ATTR_VALUE  -- value of an attribute differs
 
 
 Example (command-line linux):
