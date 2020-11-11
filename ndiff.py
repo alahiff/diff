@@ -170,7 +170,7 @@ def diff_groups(file1, grp1, file2, grp2, path):
                 else:
                     result = compare_attributes(grp1, grp2, k)
                     if not result:
-                        print("** Attribute '%s' value(s) different" % k)
+                        print("** Attribute '%s' value(s) different (DIFF_ATTR_VALUE)" % k)
                         differs = True
 
     return differs
