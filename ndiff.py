@@ -97,10 +97,15 @@ def diff_groups(file1, grp1, file2, grp2, path):
             d2 = desc2[name]["dtype"]
             print("** Different dtypes: '%s' and '%s' (DIFF_DTYPE)**" % (d1, d2))
             differs = True
+        d1name = '%s/%s' % (grp1.name, name)
+        d2name = '%s/%s' % (grp2.name, name)
+        if grp1.get(d1name).shape != grp2.get(d2name).shape:
+            print("** Different shapes: '%s' has different shapes (DIFF_DATA_SHAPE)**" % name)
+            differs = True
         else:
-            result = compare_datasets(grp1, '%s/%s' % (grp1.name, name), grp2, '%s/%s' % (grp2.name, name))
-            if not result:
-                print("** Different data: '%s' (DIFF_DATA)**" % name)
+            if not compare_datasets(grp1, d1name, grp2, d2name):
+                print("** Different data: '%s' (DIFF_DATA_VALUE)**" % name)
+                differs = True
         # compare attributes
         for k in desc1[name]["attr"]:
             if k not in desc2[name]["attr"]:
