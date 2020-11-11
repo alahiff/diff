@@ -1,6 +1,24 @@
 #!/usr/bin/python
 import h5py
+import numpy as np
 import sys
+
+# compare the contents of two datasets
+def compare_datasets(file1, dataset1, file2, dataset2):
+    np_dataset1 = np.array(file1.get(dataset1))
+    np_dataset2 = np.array(file2.get(dataset2))
+    difference = np.subtract(np_dataset1, np_dataset2)
+    if not np.all(difference == 0):
+        return False
+    return True
+
+# compare the values of two attributes
+def compare_attributes(file1, file2, name):
+    value1 = file1.attrs.get(name)
+    value2 = file2.attrs.get(name)
+    if value1 != value2:
+        return False
+    return True
 
 # load attributes
 def read_attributes(hval):
@@ -79,6 +97,10 @@ def diff_groups(file1, grp1, file2, grp2, path):
             d2 = desc2[name]["dtype"]
             print("** Different dtypes: '%s' and '%s' (DIFF_DTYPE)**" % (d1, d2))
             differs = True
+        else:
+            result = compare_datasets(grp1, '%s/%s' % (grp1.name, name), grp2, '%s/%s' % (grp2.name, name))
+            if not result:
+                print("** Different data: '%s' (DIFF_DATA)**" % name)
         # compare attributes
         for k in desc1[name]["attr"]:
             if k not in desc2[name]["attr"]:
@@ -95,6 +117,11 @@ def diff_groups(file1, grp1, file2, grp2, path):
                 if v != v2:
                     print("** Attribute '%s' has different type: '%s' and '%s' (DIFF_ATTR_DTYPE)" % (k, v, v2))
                     differs = True
+                else:
+                    result = compare_attributes(grp1, grp2, k)
+                    if not result:
+                        print("** Attribute '%s' value(s) different (DIFF_ATTR_VALUE)" % k)
+                        differs = True
     for i in range(len(common)):
         name = common[i]
         # compare types
@@ -113,6 +140,34 @@ def diff_groups(file1, grp1, file2, grp2, path):
                 differs = True
         # recurse into subgroup
         diff_groups(file1, grp1[name], file2, grp2[name], path+name+"/")
+
+    # global attributes have not been checked yet
+    if path == "/":
+        desc1 = read_group(grp1)
+        desc2 = read_group(grp2)
+
+        # compare attributes
+        for k in desc1["attr"]:
+            if k not in desc2["attr"]:
+                print("** Attribute '%s' only in '%s' (DIFF_UNIQ_ATTR_A)**" % (k, file1))
+                differs = True
+        for k in desc2["attr"]:
+            if k not in desc1["attr"]:
+                print("** Attribute '%s' only in '%s' (DIFF_UNIQ_ATTR_B)**" % (k, file2))
+                differs = True
+        for k in desc1["attr"]:
+            if k in desc2["attr"]:
+                v = desc1["attr"][k]
+                v2 = desc2["attr"][k]
+                if v != v2:
+                    print("** Attribute '%s' has different type: '%s' and '%s' (DIFF_ATTR_DTYPE)" % (k, v, v2))
+                    differs = True
+                else:
+                    result = compare_attributes(grp1, grp2, k)
+                    if not result:
+                        print("** Attribute '%s' value(s) different" % k)
+                        differs = True
+
     return differs
 
 
